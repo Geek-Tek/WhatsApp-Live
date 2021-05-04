@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "WhatsApp Live",
+    "version": "0.6",
+    "content_scripts": [
+        {
+            "matches":["https://web.whatsapp.com/"],
+            "js": ["content.js"]
+        }
+    ],
+    "background": {
+        "scripts": ["bundle.js"]
+    },
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_icon": "WhatsAppLiveLogo_128.png"
+    },
+    "icons": {
+        "128": "WhatsAppLiveLogo_128.png"
+    },
+    "permissions": ["https://whatsapp-web-live.glitch.me/"]
+}

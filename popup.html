@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>PopUp</title>
+    <style>
+        * {
+            margin: 0;
+        }
+        body {
+            width: 305px;
+            color: white;
+            font-family: 'Nunito', sans-serif;
+        }
+        .links {
+            display: flex;
+            justify-content: space-evenly;
+        }
+        .header {
+            background: #3E0C8A;
+            text-align: center;
+            padding: 27px 18px 10px 18px;
+            border-radius: 0 0 28% 28%;
+        }
+        .share {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 30px;
+            border-radius: 8px;
+            padding: 7px;
+            border: 1px solid gray;
+            background: rgba(128, 128, 128, 0.25);
+        }
+        #li {
+            flex-grow: 2;
+            display: inline;
+            overflow-x: auto;
+            overflow-y: hidden;
+            max-width: 85%;
+        }
+        #li::-webkit-scrollbar { 
+            display: none;
+        }
+        #complete {
+            display: none;
+            margin-top: 10px;
+            opacity: 1;
+            transition: 1s opacity;
+        }
+        #copyLink {
+            padding-left: 10px;
+            cursor: pointer;
+        }
+        button {
+            color: #3E0C8A;
+            background: none;
+            padding: 10px 15px;
+            border: 2px solid #3E0C8A;
+            border-radius: 25px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #3E0C8A;
+            color: white;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .tut {
+            padding-bottom: 55px;
+        }
+        #tutorial {
+            padding: 10px 50px;
+            position: absolute;
+            left: 50%;
+            -ms-transform: translateX(-50%);
+            transform: translateX(-50%);
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-evenly;
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <div class="header">
+            <h2>WhatsApp Live (Beta)</h2>
+            <h3>The new way of communicating,</h3>
+            <h3>better than instant messaging!</h3>
+            <h3>Read messages while they're written.</h3>
+            <br>
+            <p style="padding-bottom: 4px;">Share the extension with your friends:</p>
+            <div class="share">
+                <pre id="li">https://chrome.google.com/webstore/detail/whatsapp-live/ohcpfmdkhhcfhcigeigigpmlngohloea</pre>
+                <i id="copyLink" class="fa fa-clone"></i>
+            </div>
+            <p id="complete">Link copied to the clipboard</p>
+            <br>
+        </div>
+    </section>
+    <br>
+    <div class="tut">
+        <button id="tutorial">Tutorial</button>
+    </div>
+    <div class="links">
+        <button id="reportBug">Report a bug</button>
+        <button id="donation">Help the project</button>
+    </div>
+    <br>
+    <script src="popup.js"></script>
+</body>
+</html>
