@@ -14,7 +14,7 @@
       switch (message.message) {
 
         case "in whatsapp":
-          socket = io.connect("https://whatsapp-web-live.glitch.me")
+          socket = io.connect("https://whatsapp-live.glitch.me")
 
           socket.on("connect", () => {
             userPhoneNumber = message.userPhoneNumber
@@ -94,7 +94,7 @@
           break
 
         case "loaded":
-          socket = io.connect("https://whatsapp-web-live.glitch.me")
+          socket = io.connect("https://whatsapp-live.glitch.me")
           break
 
         default:
@@ -105,7 +105,7 @@
 
     chrome.runtime.onInstalled.addListener(details => {
       if (details.reason == "install") {
-        window.open("https://whatsapp-web-live.glitch.me/tutorial/")
+        window.open("https://whatsapp-live.glitch.me/tutorial/")
       } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!")
