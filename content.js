@@ -114,7 +114,11 @@ function isOthersPicutureLoaded() {
     let picLoaded = !!chatSection.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0]
     if (picLoaded) {
         otherUserPhone = chatSection.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0].src.split("%")[12].split("&")[2].split("=")[1]
-        chrome.runtime.sendMessage({message: "in a chat", otherUserPhone: otherUserPhone})
+        if (otherUserPhone != userPhoneNumber) {
+            chrome.runtime.sendMessage({message: "in a chat", otherUserPhone: otherUserPhone})
+        } else {
+            window.setTimeout(isOthersPicutureLoaded, 50)
+        }
     } else {
         window.setTimeout(isOthersPicutureLoaded, 100)
     }
