@@ -68,15 +68,18 @@
           if (splitted.length == 14 && splitted[0] == "<img") {
             if (splitted[7].split("").length == 8) {
               console.log("is an emoji, I know")
+              message.emoji = true
               message.from = userID
               message.to = otherID
               socket.emit("send message", message)
             } else {
+              message.emoji = false
               message.from = userID
               message.to = otherID
               socket.emit("send message", message)
             }
           } else {
+            message.emoji = false
             message.from = userID
             message.to = otherID
             socket.emit("send message", message)

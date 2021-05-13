@@ -152,6 +152,9 @@ function drawStatusCircle(scope) {
         ctx.fill(circle)
     }
     otherPic.parentNode.after(canvas)
+    if (document.getElementsByTagName("canvas").length > 1) {
+        document.getElementsByTagName("canvas")[0].remove()
+    }
 }
 
 function messageRecived(data) {
@@ -302,6 +305,11 @@ function createNewMessage(data) {
 
     let chatt = document.getElementsByClassName("_11liR")[0]
     chatt.appendChild(external)
+
+    if (data.emoji == true) {
+        let txt = external.getElementsByTagName("span")[3]
+        txt.innerHTML = data.txt
+    }
 
     external.scrollIntoView()
 }
