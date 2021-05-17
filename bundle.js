@@ -112,9 +112,6 @@
       } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!")
-        chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-          chrome.tabs.sendMessage(tabs[0].id, {message: "updated!"})
-        })
       }
     })
 

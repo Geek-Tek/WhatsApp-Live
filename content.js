@@ -56,10 +56,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             toDelete.parentNode.removeChild(toDelete)
             break
 
-        case "updated!":
-            console.log("You need to reload the page")
-            break
-
         default:
             console.log("unknown message recived")
             break
