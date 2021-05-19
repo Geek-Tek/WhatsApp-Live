@@ -109,9 +109,27 @@
     chrome.runtime.onInstalled.addListener(details => {
       if (details.reason == "install") {
         window.open("https://whatsapp-live.glitch.me/tutorial/")
+        chrome.windows.getAll({populate:true}, windows => {
+          windows.forEach(window => {
+            window.tabs.forEach(tab => {
+              if (tab.url === "https://web.whatsapp.com/") {
+                chrome.tabs.update(tab.id, {url: tab.url})
+              }
+            })
+          })
+        })
       } else if (details.reason == "update") {
         var thisVersion = chrome.runtime.getManifest().version
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!")
+        chrome.windows.getAll({populate:true}, windows => {
+          windows.forEach(window => {
+            window.tabs.forEach(tab => {
+              if (tab.url === "https://web.whatsapp.com/") {
+                chrome.tabs.update(tab.id, {url: tab.url})
+              }
+            })
+          })
+        })
       }
     })
 
