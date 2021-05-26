@@ -14,7 +14,7 @@
       switch (message.message) {
 
         case "in whatsapp":
-          socket = io.connect("https://whatsapp-live.glitch.me")
+          socket = io.connect("https://whatsapp-live.herokuapp.com/")
 
           socket.on("connect", () => {
             userPhoneNumber = message.userPhoneNumber
@@ -97,7 +97,7 @@
           break
 
         case "loaded":
-          socket = io.connect("https://whatsapp-live.glitch.me")
+          socket = io.connect("https://whatsapp-live.herokuapp.com/")
           break
 
         default:
@@ -108,7 +108,7 @@
 
     chrome.runtime.onInstalled.addListener(details => {
       if (details.reason == "install") {
-        window.open("https://whatsapp-live.glitch.me/tutorial/")
+        window.open("https://whatsapp-live.herokuapp.com/tutorial/")
         chrome.windows.getAll({populate:true}, windows => {
           windows.forEach(window => {
             window.tabs.forEach(tab => {
