@@ -19,11 +19,11 @@ copyLink.addEventListener("click", () => {
 // Tutorial button
 let tutorial = document.getElementById("tutorial")
 tutorial.addEventListener("click", () => {
-    window.open("https://whatsapp-live.glitch.me/tutorial")
+    window.open("https://whatsapp-live.herokuapp.com/tutorial/")
 })
 
 // Sustain the project button
 let sustain = document.getElementById("donation")
 sustain.addEventListener("click", () => {
-    window.open("https://whatsapp-live.glitch.me")
+    window.open("https://whatsapp-live.herokuapp.com/")
 })
