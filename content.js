@@ -165,7 +165,6 @@ function messageRecived(data) {
         let lll = ll.getElementsByClassName("_3-8er selectable-text copyable-text")[0]
         let lastOther = lll.getElementsByTagName("span")[0]
         if (lastOther.id != data.messageID && data.txt != "") {
-            console.log(data.txt)
             lastMessageID = data.messageID
             createNewMessage(data)
         } else {
