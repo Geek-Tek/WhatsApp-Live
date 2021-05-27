@@ -39,6 +39,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             })
             break
 
+        case "online":
+            drawStatusCircle("user online")
+            break
+
         case "not founded":
             if (otherUserPhone.split("-").length > 1) {
                 drawStatusCircle("group")
@@ -121,7 +125,6 @@ function isOthersPicutureLoaded() {
 }
 
 function drawStatusCircle(scope) {
-    let otherPic = document.getElementById("main").getElementsByClassName('_18-9u _1bvi5 _3-8er')[0];
     let canvas = document.createElement('canvas')
     canvas.height = "12"
     canvas.width = "12"
@@ -140,6 +143,10 @@ function drawStatusCircle(scope) {
                 ctx.fillStyle = "Lime"
                 canvas.title = "This user has WhatsApp Live extension"
                 break
+            case "user online":
+                ctx.fillStyle = "Lime"
+                canvas.title = "Connected to WhatsApp Live"
+                break
             case "offline":
                 ctx.fillStyle = "#484848"
                 canvas.title = "This user doesn't use WhatsApp Live extension\nYou should invite him/her"
@@ -151,9 +158,11 @@ function drawStatusCircle(scope) {
         }
         ctx.fill(circle)
     }
+    let pic = (scope === "user online") ? document : document.getElementById("main")
+    let otherPic = pic.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0]
     otherPic.parentNode.after(canvas)
-    if (document.getElementsByTagName("canvas").length > 1) {
-        document.getElementsByTagName("canvas")[0].remove()
+    if (document.getElementsByTagName("canvas").length > 2) {
+        document.getElementsByTagName("canvas")[1].remove()
     }
 }
 
