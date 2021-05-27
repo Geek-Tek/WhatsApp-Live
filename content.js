@@ -43,6 +43,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             drawStatusCircle("user online")
             break
 
+        case "user disconnected":
+            drawStatusCircle("user offline")
+            break
+
         case "not founded":
             if (otherUserPhone.split("-").length > 1) {
                 drawStatusCircle("group")
@@ -147,6 +151,10 @@ function drawStatusCircle(scope) {
                 ctx.fillStyle = "Lime"
                 canvas.title = "Connected to WhatsApp Live"
                 break
+            case "user offline":
+                ctx.fillStyle = "#990000"
+                canvas.title = "Not connected to WhatsApp Live"
+                break
             case "offline":
                 ctx.fillStyle = "#484848"
                 canvas.title = "This user doesn't use WhatsApp Live extension\nYou should invite him/her"
@@ -158,11 +166,17 @@ function drawStatusCircle(scope) {
         }
         ctx.fill(circle)
     }
-    let pic = (scope === "user online") ? document : document.getElementById("main")
+    let pic = (scope === "user online" || scope === "user offline") ? document : document.getElementById("main")
     let otherPic = pic.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0]
     otherPic.parentNode.after(canvas)
-    if (document.getElementsByTagName("canvas").length > 2) {
-        document.getElementsByTagName("canvas")[1].remove()
+    let isInChat = !!document.getElementById("main")
+    if (isInChat){
+        if (document.getElementById("main").getElementsByTagName("canvas").length > 1) {
+            document.getElementById("main").getElementsByTagName("canvas")[0].remove()
+        }
+    }
+    if (document.getElementsByClassName("_1R3Un")[0].getElementsByTagName("canvas").length > 1) {
+        document.getElementsByClassName("_1R3Un")[0].getElementsByTagName("canvas")[1].remove()
     }
 }
 

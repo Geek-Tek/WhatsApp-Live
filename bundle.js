@@ -15,6 +15,12 @@
 
         case "in whatsapp":
           socket = io.connect("https://whatsapp-live.herokuapp.com/")
+          
+          socket.on("connect_error", err => {
+            chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+              chrome.tabs.sendMessage(tabs[0].id, { message: "user disconnected" })
+            })
+          })
 
           socket.on("connect", () => {
             userPhoneNumber = message.userPhoneNumber
@@ -25,11 +31,18 @@
                 chrome.tabs.sendMessage(tabs[0].id, { message: "start session" })
               })
             })
-
+            
             socket.on("not founded", () => {
               chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
                 chrome.tabs.sendMessage(tabs[0].id, { message: "not founded" })
               })
+            })
+
+          })
+          
+          socket.on("disconnect", () => {
+            chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+              chrome.tabs.sendMessage(tabs[0].id, { message: "user disconnected" })
             })
           })
 
@@ -111,7 +124,6 @@
 
     chrome.runtime.onInstalled.addListener(details => {
       if (details.reason == "install") {
-        window.open("https://whatsapp-live.herokuapp.com/tutorial/")
         chrome.windows.getAll({populate:true}, windows => {
           windows.forEach(window => {
             window.tabs.forEach(tab => {
@@ -129,6 +141,7 @@
             window.tabs.forEach(tab => {
               if (tab.url === "https://web.whatsapp.com/") {
                 chrome.tabs.update(tab.id, {url: tab.url})
+                chrome.tabs.update(tab.id, {'active': true})
               }
             })
           })
