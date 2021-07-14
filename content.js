@@ -3,15 +3,24 @@ let messageID = ""
 let lastMessageID
 let otherUserPhone
 
+// WhatsApp Web class names
+// They change A LOT
+let textFieldClass = "_2_1wd copyable-text selectable-text"
+let userIconClass = "_8hzr9 M0JmA i0jNr"
+let chatListClass = "_3uIPm WYyr1"
+let chatUserIconClass = "_1lPgH"
+
+// listener is triggered by the bundle.js (the background script)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     
     switch (message.message) {
 
+        // if the other user has the extension, message = start session
         case "start session":
             console.log("new session started")
             drawStatusCircle("online")
             let chatSection = document.getElementById("main")
-            let textField = chatSection.getElementsByClassName("_2_1wd copyable-text selectable-text")[0]
+            let textField = chatSection.getElementsByClassName(textFieldClass)[0]
             messageID = generateMessageID()
             textField.addEventListener("input", () => {
                 /*
@@ -28,10 +37,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                     messageID: messageID
                 }
                 chrome.runtime.sendMessage(data)
+                
+                // if the message has been deleted, regenerate the message ID
                 if (textField.innerHTML === "") {
                     messageID = generateMessageID()
                 }
             })
+
             chatSection.addEventListener('keydown', e => {
                 if (e.key === "Enter" && textField.innerHTML != "") {
                     chrome.runtime.sendMessage({message: "message sent", messageID: messageID})
@@ -39,6 +51,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             })
             break
 
+        // satus cases
         case "online":
             drawStatusCircle("user online")
             break
@@ -55,26 +68,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             }
             break
 
+        // recived a message from someone else
         case "socket message":
             messageRecived(message)
             break
 
+        // recived the "warning message" for sent message from the other user
         case "message sent":
             let toDelete = document.getElementsByClassName("exterrrnal")[0]
             toDelete.parentNode.removeChild(toDelete)
             break
 
+        // if something goes wrong, just console.log it
         default:
             console.log("unknown message recived")
             break
     }
 })
 
+// if the user stop using WhatsApp Web, disconnect the user
 window.addEventListener("beforeunload", () => {
     console.log("out of load")
     chrome.runtime.sendMessage({message: "out of load"})
 })
 
+// when the user return to WhatsApp Web, reconnect the user to the server
 window.addEventListener("load", () => {
     if (userPhoneNumber) {
         console.log("loaded")
@@ -82,26 +100,32 @@ window.addEventListener("load", () => {
     }
 })
 
+// NOTE the extension starts execution here
 isWhatsAppLoaded()
 
+// check when the user icon is loaded to use it to connect to the server
 function isWhatsAppLoaded() {
-    let isInWhatsApp = !!document.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0]
+    let isInWhatsApp = !!document.getElementsByClassName(userIconClass)[0]
     
     if (isInWhatsApp) {
-        userPhoneNumber = document.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0].src.split("%")[12].split("&")[2].split("=")[1]
+        userPhoneNumber = document.getElementsByClassName(userIconClass)[0].src.split("%")[12].split("&")[2].split("=")[1]
         chrome.runtime.sendMessage({message: "in whatsapp", userPhoneNumber: userPhoneNumber}) 
         
+        // start waiting for when the user will enter in a chat
         isEnteringInChat()
     } else {
+        // BAD recursive
         window.setTimeout(isWhatsAppLoaded, 500)
         console.log("waiting...")
     }
 }
 
 function isEnteringInChat() {
-    let chatClicked = document.getElementsByClassName("JnmQF _3QmOg")[0]
+
+    let chatClicked = document.getElementsByClassName(chatListClass)[0]
     chatClicked.addEventListener("click", e => {
         let chatSection = document.getElementById("main")
+        // checking if the user is ever entered in a live chat using messageIDs
         if (messageID != "") {
             chatSection.removeEventListener("keydown", e => {
                 if (e.key === "Enter" && textField != "") {
@@ -109,20 +133,22 @@ function isEnteringInChat() {
                 }
             })
         }
+        // start waiting if the other user icon is loaded
         isOthersPicutureLoaded()
     })
 }
 
 function isOthersPicutureLoaded() {
     let chatSection = document.getElementById("main")
-    let picLoaded = !!chatSection.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0]
+    let picLoaded = !!chatSection.getElementsByClassName(userIconClass)[0]
+
     if (picLoaded) {
-        otherUserPhone = chatSection.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0].src.split("%")[12].split("&")[2].split("=")[1]
-        if (otherUserPhone != userPhoneNumber) {
+        otherUserPhone = chatSection.getElementsByClassName(userIconClass)[0].src.split("%")[12].split("&")[2].split("=")[1]
+        //if (otherUserPhone != userPhoneNumber) {
             chrome.runtime.sendMessage({message: "in a chat", otherUserPhone: otherUserPhone})
-        } else {
-            window.setTimeout(isOthersPicutureLoaded, 50)
-        }
+        //} else {
+            //window.setTimeout(isOthersPicutureLoaded, 50)
+        //}
     } else {
         window.setTimeout(isOthersPicutureLoaded, 100)
     }
@@ -167,7 +193,7 @@ function drawStatusCircle(scope) {
         ctx.fill(circle)
     }
     let pic = (scope === "user online" || scope === "user offline") ? document : document.getElementById("main")
-    let otherPic = pic.getElementsByClassName("_18-9u _1bvi5 _3-8er")[0]
+    let otherPic = pic.getElementsByClassName(userIconClass)[0]
     otherPic.parentNode.after(canvas)
     let isInChat = !!document.getElementById("main")
     if (isInChat){
@@ -175,8 +201,8 @@ function drawStatusCircle(scope) {
             document.getElementById("main").getElementsByTagName("canvas")[0].remove()
         }
     }
-    if (document.getElementsByClassName("_1R3Un")[0].getElementsByTagName("canvas").length > 1) {
-        document.getElementsByClassName("_1R3Un")[0].getElementsByTagName("canvas")[1].remove()
+    if (document.getElementsByClassName(chatUserIconClass)[0].getElementsByTagName("canvas").length > 1) {
+        document.getElementsByClassName(chatUserIconClass)[0].getElementsByTagName("canvas")[1].remove()
     }
 }
 
